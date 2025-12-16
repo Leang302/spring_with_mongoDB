@@ -1,8 +1,10 @@
 package com.leang.mongodb.service.impl;
 
 import com.leang.mongodb.model.dto.request.ProductRequest;
+import com.leang.mongodb.model.entity.Category;
 import com.leang.mongodb.model.entity.Product;
 import com.leang.mongodb.repository.ProductRepository;
+import com.leang.mongodb.service.CategoryService;
 import com.leang.mongodb.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -14,10 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
 
     @Override
     public Product createProduct(ProductRequest productRequest) {
-        return productRepository.save(productRequest.toEntity());
+        Category categoryById = categoryService.getCategoryById(productRequest.getCategoryId());
+        return productRepository.save(productRequest.toEntity(categoryById));
     }
 
     @Override
@@ -32,11 +36,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProductById(String id, ProductRequest productRequest) {
+        Category categoryById = categoryService.getCategoryById(productRequest.getCategoryId());
         Product productById = getProductById(id);
         productById.setName(productRequest.getName());
         productById.setPrice(productRequest.getPrice());
         productById.setAttributes(productRequest.getAttributes());
         productById.setReviews(productRequest.getReviews());
+        productById.setCategoryId(productRequest.getCategoryId());
+        productById.setCategoryName(categoryById.getName());
         return productRepository.save(productById);
     }
 

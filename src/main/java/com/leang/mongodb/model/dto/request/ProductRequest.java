@@ -1,6 +1,7 @@
 package com.leang.mongodb.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.leang.mongodb.model.entity.Category;
 import com.leang.mongodb.model.entity.Product;
 import com.leang.mongodb.model.entity.Review;
 import lombok.Data;
@@ -23,11 +24,12 @@ public class ProductRequest {
         attributes.put(key, value);
     }
 
-    public Product toEntity() {
+    public Product toEntity(Category categoryById) {
         return Product.builder()
                 .name(name)
                 .price(price)
                 .categoryId(categoryId)
+                .categoryName(categoryById.getName())
                 .attributes(attributes)
                 .reviews(reviews)
                 .build();

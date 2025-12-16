@@ -21,4 +21,7 @@ public class Product {
     private List<Review> reviews;
     @Field("category_id")  // Custom field name
     private String categoryId;
+    //    @DBRef  // Optional: tells Spring it's a reference (helps with some tools)
+//    private Category category;  // Full object (fetched separately)
+    private String categoryName;
 }
